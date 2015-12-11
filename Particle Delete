@@ -1,0 +1,88 @@
+ArrayList<Particle> listOfParticles;      // An ArrayList is a resizeable array, which is pretty handy. 
+                                          // Here we are declaring that we're going to create an ArrayList and put
+                                          // Particle objects in it. 
+                                          
+                                          // Take a look at the ArrayList references here:  https://processing.org/reference/ArrayList.html
+                                          // and here:   https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html
+
+void setup(){
+  
+  size(800, 500); 
+  
+  listOfParticles = new ArrayList<Particle>();    // call the constructor for the ArrayList (because ArrayList is a class too)
+  
+  colorMode(HSB, 100);                            // Hue, Saturation and Brightness colour mode
+  
+}
+ 
+
+void draw(){
+  
+  background(255);
+  
+    
+    listOfParticles.add(new Particle(new PVector(width/2, height/2),          // add a new PArticle to the ArrayList
+                                     10,
+                                     color(random(0, 100), 100, 100),
+                                     new PVector(random(-6, 6), 
+                                     random(-6, 6))));
+
+  for (Particle thisParticle: listOfParticles){
+    
+    thisParticle.updateParticlePosition();
+    thisParticle.drawParticle();
+  }
+  
+  for(int i = listOfParticles.size() -1; i >=0; i--) {          // Loop through the ArrayList using the value returned by size()
+    
+    Particle thisParticle = listOfParticles.get(i);         // Get a reference to the current Particle and store it in thisParticle
+   
+    if (thisParticle.coords.x > width || thisParticle.coords.x < 0|| thisParticle.coords.y > height || thisParticle.coords.y < 0){
+      listOfParticles.remove(i);
+  }
+  }
+
+int total = listOfParticles.size();
+println ("Total Number of Particles: " + total);;           // prints number of particles on screen - this shows the the number decreasing as well as increasing (particles being deleted)
+
+} 
+
+class Particle{
+  
+  PVector coords;
+  float diameter;
+  float radius;
+  
+  color particleFill;
+  
+  PVector speed;
+  
+
+  
+  Particle(PVector initialCoords, float initialDiameter, 
+           color initialFill, PVector initialSpeed){
+             
+           coords = initialCoords;
+           diameter = initialDiameter;
+           particleFill = initialFill;
+           radius = diameter * 0.5;
+           speed = initialSpeed;
+  }
+  
+  void drawParticle(){
+    
+    noStroke();
+    fill(particleFill);
+    ellipse(coords.x, coords.y, diameter, diameter);
+    
+  }
+  
+  void updateParticlePosition(){
+   
+    coords.x = coords.x + speed.x;
+    coords.y = coords.y + speed.y;
+    
+  }
+  
+  
+}

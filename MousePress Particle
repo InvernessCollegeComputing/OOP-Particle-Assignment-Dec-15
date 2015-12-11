@@ -1,0 +1,91 @@
+ArrayList<Particle> listOfParticles;      // An ArrayList is a resizeable array, which is pretty handy. 
+                                          // Here we are declaring that we're going to create an ArrayList and put
+                                          // Particle objects in it. 
+                                          
+                                          // Take a look at the ArrayList references here:  https://processing.org/reference/ArrayList.html
+                                          // and here:   https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html
+
+void setup(){
+  
+  size(800, 500);                                 // size of canvas for the program to run
+  
+  listOfParticles = new ArrayList<Particle>();    // call the constructor for the ArrayList (because ArrayList is a class too)
+  
+  colorMode(RGB, 100);
+  
+}
+ 
+
+void draw(){
+  
+  background(0, 0, 100);
+  
+    if (mousePressed == true){                                              // if statement for events which will occur if particles appear at mousePressed position)
+    listOfParticles.add(new Particle(new PVector(mouseX, mouseY),          // adds new particle to Array List
+                                     10,
+                                     color(random(0, 50), 100, 100),
+                                     new PVector(random(-10, 10), 
+                                     random(-10, 25 ))));
+    }
+    
+  for (Particle thisParticle: listOfParticles){
+    
+    thisParticle.updateParticlePosition();
+    thisParticle.drawParticle();
+  }
+  
+  for(int i = listOfParticles.size() -1; i >=0; i--) {          // Loop through the ArrayList using the value returned by size()
+    
+    Particle thisParticle = listOfParticles.get(i);         // Get a reference to the current Particle and store it in thisParticle
+   
+    if (thisParticle.coords.x > width ||                   // if the particle is at a position on screen where it reaches the end of the "canvas" it is removed from the array list
+    thisParticle.coords.x < 0|| 
+    thisParticle.coords.y > height || 
+    thisParticle.coords.y < 0){
+      listOfParticles.remove(i);
+  }
+  }
+
+int total = listOfParticles.size();
+
+}
+
+class Particle{
+  
+  PVector coords;
+  float diameter;
+  float radius;
+  
+  color particleFill;
+  
+  PVector speed;
+  
+
+  
+  Particle(PVector initialCoords, float initialDiameter, 
+           color initialFill, PVector initialSpeed){
+             
+           coords = initialCoords;
+           diameter = initialDiameter;
+           particleFill = initialFill;
+           radius = diameter * 30;
+           speed = initialSpeed;
+  }
+  
+  void drawParticle(){
+    
+    noStroke();
+    fill(particleFill);
+    ellipse(coords.x, coords.y, diameter, diameter);
+    
+  }
+  
+  void updateParticlePosition(){
+   
+    coords.x = coords.x + speed.x;
+    coords.y = coords.y + speed.y;
+    
+  }
+  
+  
+}
