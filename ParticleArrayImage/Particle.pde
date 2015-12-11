@@ -22,9 +22,13 @@ class Particle{
   void drawParticle(){
     
     noStroke();
-    fill(particleFill);
+   
+
+    int Pixel = pic.get(int(coords.x),int(coords.y));
+    fill(Pixel);
+ 
     ellipse(coords.x, coords.y, diameter, diameter);
-    
+   
   }
   
   void updateParticlePosition(){
