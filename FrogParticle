@@ -1,0 +1,75 @@
+ArrayList<Particle> listOfParticles; 
+PImage frog;                            // image which will be used in the program
+
+void setup (){
+
+size (800, 500);                        // size of canvas for program to run
+frog = loadImage("frog.jpg");            // Loads Image of frog to run in program
+
+
+listOfParticles = new ArrayList<Particle>();
+
+background (0);
+image (frog, 0, 0);                    // starting position of pixels for image
+
+for (int i = listOfParticles.size(); i < 2000; i++){             // as long as there is less than 2000 particles - add one more
+listOfParticles.add(new Particle(new PVector(random(0,width), random(0,height)), //random positions of particles,
+                                     10,
+                                     color(random(0, 100), 100, 100),
+                                     new PVector(random(-4, 4), 
+                                     random(-4, 4))));
+
+colorMode (HSB, 100);
+}
+}
+
+
+
+void draw (){                                        // updates position and draws new particles at new position
+  
+  for(Particle thisParticle: listOfParticles){
+    
+    thisParticle.updateParticlePosition();
+    thisParticle.drawParticle();
+
+}
+}
+
+class Particle{
+  
+  PVector coords;
+  float diameter;
+  float radius;
+  
+  color particleFill;
+  
+  PVector speed;
+  
+
+  
+  Particle(PVector initialCoords, float initialDiameter, 
+           color initialFill, PVector initialSpeed){
+             
+           coords = initialCoords;
+           diameter = initialDiameter;
+           particleFill = initialFill;
+           radius = diameter * 0.5;
+           speed = initialSpeed;
+  }
+  
+  void drawParticle(){
+    
+    noStroke();
+    color pixel = frog.get(int(coords.x),int(coords.y));
+    fill(pixel);
+    ellipse(coords.x, coords.y, diameter, diameter);
+    
+  }
+
+
+void updateParticlePosition (){
+  
+  coords.x = coords.x + speed.x;
+  coords.y = coords.y + speed.y;
+}
+}
